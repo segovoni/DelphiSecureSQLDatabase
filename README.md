@@ -19,6 +19,10 @@ For detailed instructions on how to use DelphiSecureSQLDatabase, refer to the [D
 
 Contributions are welcome! If you would like to contribute to DelphiSecureSQLDatabase, please follow the [Contribution Guidelines](https://github.com/segovoni/DelphiSecureSQLDatabase/blob/master/docs/CONTRIBUTING.md).
 
+## Contact
+
+For any questions or assistance, please reach out via the [Issues](https://github.com/segovoni/DelphiSecureSQLDatabase/issues) section in the repository.
+
 ## License
 
 This project is licensed under the GNU General Public License (GPL). See the [LICENSE](LICENSE) file for details.
