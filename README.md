@@ -17,7 +17,7 @@ For detailed instructions on how to use DelphiSecureSQLDatabase, refer to the [D
 
 ## Contributing
 
-Contributions are welcome! If you would like to contribute to DelphiSecureSQLDatabase, please follow the [Contribution Guidelines](link_to_contributing_guidelines).
+Contributions are welcome! If you would like to contribute to DelphiSecureSQLDatabase, please follow the [Contribution Guidelines](https://github.com/segovoni/DelphiSecureSQLDatabase/blob/master/docs/CONTRIBUTING.md).
 
 ## License
 
