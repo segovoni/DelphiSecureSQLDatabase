@@ -14,23 +14,23 @@ type
   const
     SQL_INSERT =
       'INSERT INTO dbo.Persons ' +
-      '(FirstName, LastName, Gender, SocialSecurityNumber, CreditCardNumber, Salary) ' +
+      '(FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary) ' +
       'VALUES ' +
-      '(:FirstName, :LastName, :Gender, :SocialSecurityNumber, :CreditCardNumber, :Salary)';
+      '(:FirstName, :LastName, :BirthDate, :SocialSecurityNumber, :CreditCardNumber, :Salary)';
     SQL_UPDATE =
       'UPDATE dbo.Persons SET ' +
         'FirstName = :FirstName ' +
         ',LastName = :LastName ' +
-        ',Gender = :Gender ' +
+        ',BirthDate = :BirthDate ' +
         ',SocialSecurityNumber = :SocialSecurityNumber ' +
         ',CreditCardNumber = :CreditCardNumber ' +
         ',Salary = :Salary ' +
       'WHERE ' +
         '(ID = :ID)';
     SQL_FIND_ALL =
-      'SELECT ID, FirstName, LastName, Gender, SocialSecurityNumber, CreditCardNumber, Salary FROM dbo.Persons';
+      'SELECT ID, FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary FROM dbo.Persons';
     SQL_FIND_BY_PK =
-      'SELECT ID, FirstName, LastName, Gender, SocialSecurityNumber, CreditCardNumber, Salary FROM dbo.Persons WHERE (ID = %d)';
+      'SELECT ID, FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary FROM dbo.Persons WHERE (ID = %d)';
     SQL_DELETE =
       'DELETE FROM dbo.Persons WHERE (ID = %d)';
     SQL_DELETE_ALL =
@@ -39,13 +39,13 @@ type
     FID: Integer;
     FFirstName: string;
     FLastName: string;
-    FGender: string;
+    FBirthDate: TDateTime;
     FSocialSecurityNumber: string;//[11];
     FCreditCardNumber: string;//[19];
     FSalary: Currency;
     procedure SetFirstName(const AValue: string);
     procedure SetLastName(const AValue: string);
-    procedure SetGender(const AValue: string);
+    procedure SetBirthDate(const AValue: TDateTime);
     procedure SetSocialSecurityNumber(const AValue: string);
     procedure SetCreditCardNumber(const AValue: string);
     procedure SetSalary(const AValue: Currency);
@@ -62,7 +62,7 @@ type
     property ID: Integer read FID;
     property FirstName: string read FFirstName write SetFirstName;
     property LastName: string read FLastName write SetLastName;
-    property Gender: string read FGender write SetGender;
+    property BirthDate: TDateTime read FBirthDate write SetBirthDate;
     property SocialSecurityNumber: string read FSocialSecurityNumber write SetSocialSecurityNumber;
     property CreditCardNumber: string read FCreditCardNumber write SetCreditCardNumber;
     property Salary: Currency read FSalary write SetSalary;
@@ -161,7 +161,7 @@ begin
   try
     LQry.Connection := DM.FDConnection;
     LQry.SQL.Text :=
-      Format(SQL_INSERT, [FirstName, LastName, Gender, SocialSecurityNumber,
+      Format(SQL_INSERT, [FirstName, LastName, BirthDate, SocialSecurityNumber,
         CreditCardNumber, Salary]);
     Connection.ResourceOptions.DirectExecute := True;
     LQry.ExecSQL;
@@ -179,7 +179,7 @@ begin
   result.FID := AReader.Fields[0].AsInteger;
   result.FFirstName := AReader.Fields[1].AsString;
   result.FLastName := AReader.Fields[2].AsString;
-  result.Gender := AReader.Fields[3].AsString;
+  result.BirthDate := AReader.Fields[3].AsDateTime;
   result.FSocialSecurityNumber := AReader.Fields[4].AsString;
   result.FCreditCardNumber := AReader.Fields[5].AsString;
   result.FSalary := AReader.Fields[6].AsCurrency;
@@ -195,9 +195,9 @@ begin
   FFirstName := AValue;
 end;
 
-procedure TPersonActiveRecord.SetGender(const AValue: string);
+procedure TPersonActiveRecord.SetBirthDate(const AValue: TDateTime);
 begin
-  FGender := AValue;
+  FBirthDate := AValue;
 end;
 
 procedure TPersonActiveRecord.SetLastName(const AValue: string);
@@ -226,8 +226,8 @@ begin
 
     LQry.ParamByName('FirstName').DataType := ftstring;
     LQry.ParamByName('LastName').DataType := ftstring;
-    LQry.ParamByName('Gender').DataType := ftFixedWideChar; // NCHAR - Unicode
-    LQry.ParamByName('Gender').Size := 10;
+    LQry.ParamByName('BirthDate').DataType := ftDateTime;
+    LQry.ParamByName('BirthDate').Size := 11;
     LQry.ParamByName('SocialSecurityNumber').DataType := ftFixedChar; // CHAR - non-Unicode
     LQry.ParamByName('SocialSecurityNumber').Size := 10;
     LQry.ParamByName('CreditCardNumber').DataType := ftFixedChar; // CHAR - non-Unicode
@@ -239,7 +239,7 @@ begin
 
     LQry.ParamByName('FirstName').AsString := FirstName;
     LQry.ParamByName('LastName').AsString := LastName;
-    LQry.ParamByName('Gender').AsString := Gender;
+    LQry.ParamByName('BirthDate').AsDateTime := BirthDate;
     LQry.ParamByName('SocialSecurityNumber').AsString := SocialSecurityNumber;
     LQry.ParamByName('CreditCardNumber').AsString := CreditCardNumber;
     LQry.ParamByName('Salary').AsCurrency := Salary;

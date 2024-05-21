@@ -71,7 +71,7 @@ CREATE TABLE dbo.Persons
   ID INTEGER IDENTITY(1, 1) NOT NULL
   ,FirstName NVARCHAR(16) NOT NULL
   ,LastName NVARCHAR(16) NOT NULL
-  ,Gender NCHAR(10) NULL
+  ,BirthDate DATETIME2 NOT NULL
   ,SocialSecurityNumber CHAR(10) NOT NULL
    -- COLLATE Latin1_General_BIN2 NOT NULL
   ,CreditCardNumber CHAR(15)
@@ -83,10 +83,10 @@ GO
 
 
 INSERT INTO dbo.Persons
-  (FirstName, LastName, Gender, SocialSecurityNumber, CreditCardNumber, Salary)
+  (FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary)
 VALUES
-  ('Rob', 'Walters', 'Male', '1520273859', '372305256328259', 31692)
-  ,('Gail', 'Erickson', 'Female', '4520283752', '502301225345239', 40984);
+  ('Rob', 'Walters', '1975-09-17 11:02:51', '1520273859', '372305256328259', 31692)
+  ,('Gail', 'Erickson', '1978-09-18 15:03:55', '4520283752', '502301225345239', 40984);
 GO
 
 
@@ -94,7 +94,7 @@ SELECT
   ID
   ,FirstName
   ,LastName
-  ,Gender
+  ,BirthDate
   ,SocialSecurityNumber
   ,CreditCardNumber
   ,Salary

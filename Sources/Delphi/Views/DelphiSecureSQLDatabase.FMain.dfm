@@ -36,6 +36,13 @@ object frmAlwaysEncryptedMain: TfrmAlwaysEncryptedMain
       Caption = 'Modify Person'
       TabOrder = 0
       ExplicitWidth = 920
+      object lblBirthDate: TLabel
+        Left = 650
+        Top = 24
+        Width = 67
+        Height = 21
+        Caption = 'Birth date'
+      end
       object btnUpdate: TButton
         Left = 650
         Top = 167
@@ -100,16 +107,14 @@ object frmAlwaysEncryptedMain: TfrmAlwaysEncryptedMain
         TabOrder = 5
         Text = ''
       end
-      object lbledtGender: TLabeledEdit
+      object dtpBirthDate: TDateTimePicker
         Left = 650
-        Top = 48
+        Top = 49
         Width = 262
         Height = 29
-        EditLabel.Width = 51
-        EditLabel.Height = 21
-        EditLabel.Caption = 'Gender'
+        Date = 45433.000000000000000000
+        Time = 0.666134999999485400
         TabOrder = 6
-        Text = ''
       end
     end
     object cpQueryEncryptedData: TCategoryPanel
@@ -158,8 +163,8 @@ object frmAlwaysEncryptedMain: TfrmAlwaysEncryptedMain
         Align = alBottom
         Lines.Strings = (
           
-            'SELECT ID, FirstName, LastName, Gender, SocialSecurityNumber, Cr' +
-            'editCardNumber, Salary FROM dbo.Persons;')
+            'SELECT ID, FirstName, LastName, BirthDate, SocialSecurityNumber,' +
+            ' CreditCardNumber, Salary FROM dbo.Persons;')
         TabOrder = 2
         ExplicitWidth = 918
       end

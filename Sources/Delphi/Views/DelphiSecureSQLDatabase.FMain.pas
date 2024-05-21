@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Mask, Vcl.CategoryButtons,
   DelphiSecureSQLDatabase.Interfaces, DelphiSecureSQLDatabase.MainPresenter,
-  Vcl.CheckLst, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls;
+  Vcl.CheckLst, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.ComCtrls;
 
 type
   TfrmAlwaysEncryptedMain = class(TForm, IMainView)
@@ -34,7 +34,8 @@ type
     lbledtCreditCardNumber: TLabeledEdit;
     lbledtSalary: TLabeledEdit;
     lbledtSocialSecurityNumber: TLabeledEdit;
-    lbledtGender: TLabeledEdit;
+    dtpBirthDate: TDateTimePicker;
+    lblBirthDate: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnConnectClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -58,7 +59,7 @@ type
     function GetdsQueryEncryptedData: TDataSource;
     function GetFirstName: string;
     function GetLastName: string;
-    function GetGender: string;
+    function GetBirthDate: TDateTime;
     function GetSocialSecurityNumber: string;
     function GetCreditCardNumber: string;
     function GetSalary: Currency;
@@ -68,7 +69,7 @@ type
     procedure UpdatePerson;
     procedure DisplayFirstName(AValue: string);
     procedure DisplayLastName(AValue: string);
-    procedure DisplayGender(AValue: string);
+    procedure DisplayBirthDate(AValue: TDateTime);
     procedure DisplaySocialSecurityNumber(AValue: string);
     procedure DisplayCreditCardNumber(AValue: string);
     procedure DisplaySalary(AValue: Currency);
@@ -118,9 +119,9 @@ begin
   lbledtFirstName.Text := AValue;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayGender(AValue: string);
+procedure TfrmAlwaysEncryptedMain.DisplayBirthDate(AValue: TDateTime);
 begin
-  lbledtGender.Text := AValue;
+  dtpBirthDate.DateTime := AValue;
 end;
 
 procedure TfrmAlwaysEncryptedMain.DisplayLastName(AValue: string);
@@ -191,9 +192,9 @@ begin
   result := lbledtFirstName.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetGender: string;
+function TfrmAlwaysEncryptedMain.GetBirthDate: TDateTime;
 begin
-  result := lbledtGender.Text;
+  result := dtpBirthDate.DateTime;
 end;
 
 function TfrmAlwaysEncryptedMain.GetLastName: string;
