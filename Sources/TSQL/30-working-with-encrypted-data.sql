@@ -22,6 +22,12 @@ GO
 SELECT * FROM dbo.Persons;
 GO
 
+SELECT * FROM dbo.Persons WHERE LastName = 'Hirtzmann';
+GO
+
+SELECT * FROM dbo.Persons WHERE SocialSecurityNumber = '4895529150';
+GO
+
 
 -- Enable Always Encrypted (column encryption) set to enabled
 -- SSMS will attempt to decrypt the data stored in the encrypted columns
@@ -29,14 +35,34 @@ GO
 SELECT * FROM dbo.Persons;
 GO
 
+SELECT * FROM dbo.Persons WHERE SocialSecurityNumber = '4895529150';
+GO
+
+
+-- Enabling parameterization for Always Encrypted
+-- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ssms#enabling-and-disabling-parameterization-for-always-encrypted
+
+
+DECLARE
+  @SocialSecurityNumber CHAR(10) = '4895529150';
+SELECT * FROM dbo.Persons WHERE SocialSecurityNumber = @SocialSecurityNumber;
+GO
+
+
+SELECT MAX(BirthDate) AS MaxBirthDate FROM dbo.Persons;
+SELECT YEAR(BirthDate) AS YearBirthDate FROM dbo.Persons;
+GO
+
+SELECT 'SSN: ' + SocialSecurityNumber FROM dbo.Persons; 
+GO
 
 -- Let's try to insert a new record in the dbo.Persons
 
 -- This query will fail
 INSERT INTO dbo.Persons
-  (FirstName, LastName, SocialSecurityNumber, CreditCardNumber, Salary)
+  (FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary)
 VALUES
-  ('Janice', 'Galvin', '327-89-2514', '9999-1111-2222-3333', $38115);
+  ('Janice', 'Galvin', '1979-09-21 10:08:51', '6875189805', '337951212597372', $38115);
 GO
 
 
@@ -53,42 +79,29 @@ GO
 
 -- Inserting values into encrypted columns is allowed only using parameters
 
-DECLARE
-  @SocialSecurityNumber CHAR(11) = '327-89-2514'
-  ,@CreditCardNumber CHAR(19) = '9999-1111-2222-3333'
-  ,@Salary MONEY = $38115;
-
-INSERT INTO dbo.Persons
-  (FirstName, LastName, SocialSecurityNumber, CreditCardNumber, Salary)
-VALUES
-  ('Janice', 'Galvin', @SocialSecurityNumber, @CreditCardNumber, @Salary);
-GO
-
-
--- Encryption scheme mismatch for columns/variables '@SocialSecurityNumber'.
--- The encryption scheme for the columns/variables is (encryption_type = 'PLAINTEXT')
--- and the expression near line '6' expects it to be DETERMINISTIC, or PLAINTEXT
-
 
 -- Enabling parameterization for Always Encrypted
 -- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ssms#enabling-and-disabling-parameterization-for-always-encrypted
 
 
 DECLARE
-  @SocialSecurityNumber CHAR(11) = '327-89-2514'
-  ,@CreditCardNumber CHAR(19) = '9999-1111-2222-3333'
-  ,@Salary MONEY = $38115;
+  @SocialSecurityNumber CHAR(10) = '6875189805'
+  ,@CreditCardNumber CHAR(15) = '337951212597372'
+  ,@BirthDate DATETIME2 = '1979-09-21'
+  ,@Salary DECIMAL(19, 4) = 38115;
 
 INSERT INTO dbo.Persons
-  (FirstName, LastName, SocialSecurityNumber, CreditCardNumber, Salary)
+  (FirstName, LastName, BirthDate, SocialSecurityNumber, CreditCardNumber, Salary)
 VALUES
-  ('Janice', 'Galvin', @SocialSecurityNumber, @CreditCardNumber, @Salary);
+  ('Janice', 'Galvin', @BirthDate, @SocialSecurityNumber, @CreditCardNumber, @Salary);
 GO
+
+
 
 
 -- UPDATEs into a table with encrypted columns
 DECLARE
-  @Salary MONEY = $38615;
+  @Salary DECIMAL(19, 4) = 38615;
 
 UPDATE
   dbo.Persons
@@ -100,7 +113,7 @@ GO
 
 
 DECLARE
-  @SocialSecurityNumber CHAR(11) = '795-00-0000';
+  @SocialSecurityNumber CHAR(10) = '6875899805';
 
 UPDATE
   dbo.Persons
@@ -109,14 +122,3 @@ SET
 WHERE
   FirstName = 'Janice';
 GO
-
-
-/*
-DECLARE @NonEncryptedValue CHAR(11) = '795-00-0000';
-
-UPDATE
-  dbo.Persons
-SET
-  SocialSecurityNumber = @NonEncryptedValue;
-GO
-*/
