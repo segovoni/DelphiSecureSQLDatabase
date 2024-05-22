@@ -21,7 +21,7 @@ type
     function GetdsQueryEncryptedData: TDataSource;
     function GetFirstName: string;
     function GetLastName: string;
-    function GetGender: string;
+    function GetBirthDate: TDateTime;
     function GetSocialSecurityNumber: string;
     function GetCreditCardNumber: string;
     function GetSalary: Currency;
@@ -31,7 +31,7 @@ type
     procedure Update;
     procedure DisplayFirstName(AValue: string);
     procedure DisplayLastName(AValue: string);
-    procedure DisplayGender(AValue: string);
+    procedure DisplayBirthDate(AValue: TDateTime);
     procedure DisplaySocialSecurityNumber(AValue: string);
     procedure DisplayCreditCardNumber(AValue: string);
     procedure DisplaySalary(AValue: Currency);

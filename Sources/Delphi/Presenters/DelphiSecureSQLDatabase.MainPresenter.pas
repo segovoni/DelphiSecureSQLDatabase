@@ -96,7 +96,7 @@ begin
 
   FMainView.DisplayFirstName(LPersonAR.FirstName);
   FMainView.DisplayLastName(LPersonAR.LastName);
-  FMainView.DisplayGender(LPersonAR.Gender);
+  FMainView.DisplayBirthDate(LPersonAR.BirthDate);
   FMainView.DisplaySocialSecurityNumber(LPersonAR.SocialSecurityNumber);
   FMainView.DisplayCreditCardNumber(LPersonAR.CreditCardNumber);
   FMainView.DisplaySalary(LPersonAR.Salary);
@@ -132,7 +132,7 @@ begin
   try
     LPersonAR.FirstName := FMainView.GetFirstName;
     LPersonAR.LastName := FMainView.GetLastName;
-    LPersonAR.Gender := FMainView.GetGender;
+    LPersonAR.BirthDate := FMainView.GetBirthDate;
     LPersonAR.SocialSecurityNumber := FMainView.GetSocialSecurityNumber;
     LPersonAR.CreditCardNumber := FMainView.GetCreditCardNumber;
     LPersonAR.Salary := FMainView.GetSalary;
