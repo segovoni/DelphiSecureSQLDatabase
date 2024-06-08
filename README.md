@@ -1,6 +1,6 @@
-# DelphiSecureSQLDatabase
+# Delphi Secure SQL Database
 
-DelphiSecureSQLDatabase is an open-source project focused on enabling robust handling of encrypted databases in Delphi applications, including seamless management of DML operations on tables with encrypted columns. The project provides support for SQL Server and Azure SQL Database.
+Delphi Secure SQL Database is an open-source project focused on enabling robust handling of encrypted databases in Delphi applications, including seamless management of DML operations on tables with encrypted columns. The project provides support for SQL Server and Azure SQL Database.
 
 ## Features
 
