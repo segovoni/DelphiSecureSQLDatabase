@@ -226,13 +226,18 @@ begin
 
     LQry.ParamByName('FirstName').DataType := ftstring;
     LQry.ParamByName('LastName').DataType := ftstring;
+
     LQry.ParamByName('BirthDate').DataType := ftDateTime;
     LQry.ParamByName('BirthDate').Size := 11;
+
     LQry.ParamByName('SocialSecurityNumber').DataType := ftFixedChar; // CHAR - non-Unicode
     LQry.ParamByName('SocialSecurityNumber').Size := 10;
+
     LQry.ParamByName('CreditCardNumber').DataType := ftFixedChar; // CHAR - non-Unicode
     LQry.ParamByName('CreditCardNumber').Size := 15;
+
     LQry.ParamByName('Salary').DataType := ftCurrency;
+
     LQry.ParamByName('ID').DataType := ftInteger;
 
     LQry.Prepare;

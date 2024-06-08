@@ -15,8 +15,8 @@ GO
 
 
 -- Enable Always Encrypted (column encryption) set to disabled
--- Query the dbo.Persons
 
+-- Query the dbo.Persons
 -- SSMS will not be able to decrypt the data stored in the encrypted columns;
 -- the following query will return the encrypted data
 SELECT * FROM dbo.Persons;
@@ -41,10 +41,10 @@ GO
 
 -- Enabling parameterization for Always Encrypted
 -- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ssms#enabling-and-disabling-parameterization-for-always-encrypted
+-- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ads
 
+DECLARE @SocialSecurityNumber CHAR(10) = '4895529150';
 
-DECLARE
-  @SocialSecurityNumber CHAR(10) = '4895529150';
 SELECT * FROM dbo.Persons WHERE SocialSecurityNumber = @SocialSecurityNumber;
 GO
 
@@ -82,7 +82,7 @@ GO
 
 -- Enabling parameterization for Always Encrypted
 -- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ssms#enabling-and-disabling-parameterization-for-always-encrypted
-
+-- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-query-columns-ads#enabling-and-disabling-parameterization-for-always-encrypted
 
 DECLARE
   @SocialSecurityNumber CHAR(10) = '6875189805'
@@ -100,8 +100,7 @@ GO
 
 
 -- UPDATEs into a table with encrypted columns
-DECLARE
-  @Salary DECIMAL(19, 4) = 38615;
+DECLARE @Salary DECIMAL(19, 4) = 38615;
 
 UPDATE
   dbo.Persons
@@ -112,8 +111,7 @@ WHERE
 GO
 
 
-DECLARE
-  @SocialSecurityNumber CHAR(10) = '6875899805';
+DECLARE @SocialSecurityNumber CHAR(10) = '6875899805';
 
 UPDATE
   dbo.Persons
