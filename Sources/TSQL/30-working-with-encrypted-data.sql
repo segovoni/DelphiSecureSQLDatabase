@@ -56,6 +56,19 @@ GO
 SELECT 'SSN: ' + SocialSecurityNumber FROM dbo.Persons; 
 GO
 
+
+CREATE NONCLUSTERED INDEX IX_Persons_SocialSecurityNumber ON dbo.Persons
+(
+  [SocialSecurityNumber]
+);
+GO
+
+CREATE NONCLUSTERED INDEX IX_Person_BirthDate ON dbo.Persons
+(
+  [BirthDate]
+);
+GO
+
 -- Let's try to insert a new record in the dbo.Persons
 
 -- This query will fail
