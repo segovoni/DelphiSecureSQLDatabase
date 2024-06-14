@@ -51,6 +51,8 @@ GO
 
 SELECT MAX(BirthDate) AS MaxBirthDate FROM dbo.Persons;
 SELECT YEAR(BirthDate) AS YearBirthDate FROM dbo.Persons;
+
+SELECT MAX(SocialSecurityNumber) FROM dbo.Persons;
 GO
 
 SELECT 'SSN: ' + SocialSecurityNumber FROM dbo.Persons; 
