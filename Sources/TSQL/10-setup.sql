@@ -15,12 +15,12 @@ GO
 
 
 -- Drop sample database
-IF (DB_ID('AlwaysEncryptedDB') IS NOT NULL)
+IF (DB_ID('SecureSQLDatabase') IS NOT NULL)
 BEGIN
-  ALTER DATABASE [AlwaysEncryptedDB]
+  ALTER DATABASE [SecureSQLDatabase]
     SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 
-  DROP DATABASE [AlwaysEncryptedDB];
+  DROP DATABASE [SecureSQLDatabase];
 END;
 GO
 
@@ -44,25 +44,25 @@ WHERE [name] = 'Delphi_User';
 GO
 
 
-CREATE DATABASE [AlwaysEncryptedDB]
+CREATE DATABASE [SecureSQLDatabase]
  ON  PRIMARY 
  (
-   NAME = N'AlwaysEncryptedDB'
-   ,FILENAME = N'C:\SQL\DBs\AlwaysEncryptedDB.mdf'
+   NAME = N'SecureSQLDatabase'
+   ,FILENAME = N'C:\SQL\DBs\SecureSQLDatabase.mdf'
    ,SIZE = 8192KB
    ,FILEGROWTH = 65536KB
  )
  LOG ON 
  (
-   NAME = N'AlwaysEncryptedDB_log'
-   ,FILENAME = N'C:\SQL\DBs\AlwaysEncryptedDB_log.ldf'
+   NAME = N'SecureSQLDatabase_log'
+   ,FILENAME = N'C:\SQL\DBs\SecureSQLDatabase_log.ldf'
    ,SIZE = 8192KB
    ,FILEGROWTH = 65536KB
   )
 GO
 
 
-USE [AlwaysEncryptedDB];
+USE [SecureSQLDatabase];
 GO
 
 
