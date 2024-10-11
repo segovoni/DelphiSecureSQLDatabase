@@ -30,7 +30,7 @@ IF EXISTS (SELECT principal_id FROM sys.sql_logins WHERE name = 'Delphi_User')
   DROP LOGIN [Delphi_User];
 
 CREATE LOGIN [Delphi_User] WITH
-  PASSWORD = 'DelphiDay2024!'
+  PASSWORD = 'DelphiSecureSQLDatabase!'
   ,SID = 0x7427B4ADC1F5F041AAD461C29DCDA151;
 
 SELECT
