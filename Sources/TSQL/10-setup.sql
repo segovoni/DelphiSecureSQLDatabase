@@ -250,13 +250,13 @@ FROM
   [Ledger].[AppendOnly_Invoices];
 GO
 
+/*
 UPDATE
   [Ledger].[AppendOnly_Invoices]
 SET 
   TotalDue = 1000
 WHERE ID = 1;
-
-DELETE 
+*/
 
 -- Ledger system table
 SELECT * FROM sys.database_ledger_transactions;
