@@ -1,11 +1,7 @@
 ------------------------------------------------------------------------
--- Event:        Delphi Day 2024 - June 11-12                         --
---               https://www.delphiday.it/                            --
+-- Project:      Delphi Secure SQL Database!                          --
 --                                                                    --
--- Session:      SQL Server Encryption: Data protection in a          --
---               Delphi Applications!                                 --
---                                                                    --
--- Demo:         Working with Always Encrypted database               --
+-- Script:       Working with Always Encrypted database               --
 -- Author:       Sergio Govoni                                        --
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------

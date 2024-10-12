@@ -1,11 +1,7 @@
 ------------------------------------------------------------------------
--- Event:        Delphi Day 2024 - June 11-12                         --
---               https://www.delphiday.it/                            --
+-- Project:      Delphi Secure SQL Database!                          --
 --                                                                    --
--- Session:      SQL Server Encryption: Data protection in a          --
---               Delphi Applications!                                 --
---                                                                    --
--- Demo:         Setup databases (reset DB)                           --
+-- Script:       Setup databases (reset DB)                           --
 -- Author:       Sergio Govoni                                        --
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------
@@ -209,7 +205,7 @@ FROM
 GO
 
 /*
-SELECT * FROM Ledger.MSSQL_LedgerHistoryFor_901578250
+SELECT * FROM Ledger.MSSQL_LedgerHistoryFor_917578307
 SELECT * FROM [Ledger].[Updatable_Invoices_Ledger] ORDER BY ledger_transaction_id;
 GO
 */
@@ -253,6 +249,14 @@ SELECT
 FROM
   [Ledger].[AppendOnly_Invoices];
 GO
+
+UPDATE
+  [Ledger].[AppendOnly_Invoices]
+SET 
+  TotalDue = 1000
+WHERE ID = 1;
+
+DELETE 
 
 -- Ledger system table
 SELECT * FROM sys.database_ledger_transactions;

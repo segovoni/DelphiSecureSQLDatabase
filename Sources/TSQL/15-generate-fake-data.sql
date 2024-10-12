@@ -1,11 +1,7 @@
 ------------------------------------------------------------------------
--- Event:        Delphi Day 2024 - June 11-12                         --
---               https://www.delphiday.it/                            --
+-- Project:      Delphi Secure SQL Database!                          --
 --                                                                    --
--- Session:      SQL Server Encryption: Data protection in a          --
---               Delphi Applications!                                 --
---                                                                    --
--- Demo:         Generate fake data                                   --
+-- Script:       Generate fake data                                   --
 -- Author:       Sergio Govoni                                        --
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------
