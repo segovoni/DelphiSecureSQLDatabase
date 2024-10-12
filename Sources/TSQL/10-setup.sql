@@ -283,13 +283,16 @@ CREATE USER [Delphi_User] FOR LOGIN [Delphi_User]
 
 EXEC sp_addrolemember 'db_datareader', 'Delphi_User';
 EXEC sp_addrolemember 'db_datawriter', 'Delphi_User';
-
-SELECT * FROM master.sys.server_principals WHERE [sid] = 0x7427B4ADC1F5F041AAD461C29DCDA151
 GO
 
+-- GRANT permissions to [Delphi_User]  
+GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [Delphi_User];
+GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [Delphi_User];
+GO
+
+SELECT * FROM master.sys.server_principals WHERE [sid] = 0x7427B4ADC1F5F041AAD461C29DCDA151;
 -- Database master key (CMK)
 SELECT * FROM sys.column_master_keys;
-
 -- Column encryption keys (CEK)
 SELECT * FROM sys.column_encryption_keys;
 GO
