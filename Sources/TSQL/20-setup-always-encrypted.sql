@@ -6,7 +6,7 @@
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------
 
-USE [master];
+USE [SecureSQLDatabase];
 GO
 
 -- SQL Server encryption
@@ -39,21 +39,3 @@ GO
 -- Database permissions
 -- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-database-engine?WT.mc_id=DP-MVP-4029181#database-permissions
 
-USE [AlwaysEncryptedDB];
-GO
-
--- GRANT permissions to [Delphi_User]  
-GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [Delphi_User];
-GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [Delphi_User];
-GO
-
-SELECT
-  ID
-  ,FirstName
-  ,LastName
-  ,SocialSecurityNumber
-  ,CreditCardNumber
-  ,Salary
-FROM
-  dbo.Persons;
-GO
