@@ -6,7 +6,7 @@
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------
 
-USE [AlwaysEncryptedDB];
+USE [SecureSQLDatabase];
 GO
 
 
