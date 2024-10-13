@@ -16,6 +16,7 @@ type
     FDQrySelectEncryptedData: TFDQuery;
     FDQryUpdateEncryptedData: TFDQuery;
     FDPhysMSSQLDriverLink: TFDPhysMSSQLDriverLink;
+    FDQrySelectUpdatableInvoices: TFDQuery;
   private
   public
   end;

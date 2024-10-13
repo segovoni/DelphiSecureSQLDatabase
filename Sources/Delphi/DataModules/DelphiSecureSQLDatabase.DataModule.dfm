@@ -1,6 +1,6 @@
 object DM: TDM
-  Height = 399
-  Width = 524
+  Height = 449
+  Width = 673
   PixelsPerInch = 144
   object FDConnection: TFDConnection
     Left = 96
@@ -9,8 +9,8 @@ object DM: TDM
   object FDQrySelectEncryptedData: TFDQuery
     AutoCalcFields = False
     Connection = FDConnection
-    Left = 372
-    Top = 24
+    Left = 412
+    Top = 40
   end
   object FDQryUpdateEncryptedData: TFDQuery
     Connection = FDConnection
@@ -20,5 +20,10 @@ object DM: TDM
   object FDPhysMSSQLDriverLink: TFDPhysMSSQLDriverLink
     Left = 96
     Top = 228
+  end
+  object FDQrySelectUpdatableInvoices: TFDQuery
+    Connection = FDConnection
+    Left = 412
+    Top = 160
   end
 end

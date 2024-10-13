@@ -1,16 +1,12 @@
 ------------------------------------------------------------------------
--- Event:        Delphi Day 2024 - June 11-12                         --
---               https://www.delphiday.it/                            --
+-- Project:      Delphi Secure SQL Database!                          --
 --                                                                    --
--- Session:      SQL Server Encryption: Data protection in a          --
---               Delphi Applications!                                 --
---                                                                    --
--- Demo:         Setup SQL Server Always Encrypted                    --
+-- Script:       Setup SQL Server Always Encrypted                    --
 -- Author:       Sergio Govoni                                        --
 -- Notes:        --                                                   --
 ------------------------------------------------------------------------
 
-USE [master];
+USE [SecureSQLDatabase];
 GO
 
 -- SQL Server encryption
@@ -43,21 +39,3 @@ GO
 -- Database permissions
 -- https://learn.microsoft.com/sql/relational-databases/security/encryption/always-encrypted-database-engine?WT.mc_id=DP-MVP-4029181#database-permissions
 
-USE [AlwaysEncryptedDB];
-GO
-
--- GRANT permissions to [Delphi_User]  
-GRANT VIEW ANY COLUMN MASTER KEY DEFINITION TO [Delphi_User];
-GRANT VIEW ANY COLUMN ENCRYPTION KEY DEFINITION TO [Delphi_User];
-GO
-
-SELECT
-  ID
-  ,FirstName
-  ,LastName
-  ,SocialSecurityNumber
-  ,CreditCardNumber
-  ,Salary
-FROM
-  dbo.Persons;
-GO
