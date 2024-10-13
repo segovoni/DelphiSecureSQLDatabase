@@ -7,10 +7,13 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Mask, Vcl.CategoryButtons,
   DelphiSecureSQLDatabase.Interfaces, DelphiSecureSQLDatabase.MainPresenter,
-  Vcl.CheckLst, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.ComCtrls;
+  Vcl.CheckLst, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.ComCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
-  TfrmAlwaysEncryptedMain = class(TForm, IMainView)
+  TMainForm = class(TForm, IMainView)
     cpgAlwaysEncrypted: TCategoryPanelGroup;
     cpConnection: TCategoryPanel;
     lbledtDriverID: TLabeledEdit;
@@ -27,27 +30,41 @@ type
     memoSELECT: TMemo;
     dsQueryEncryptedData: TDataSource;
     btnOpenQuery: TButton;
-    cpUpdatePerson: TCategoryPanel;
-    btnUpdate: TButton;
+    pnlModifyEncryptedData: TPanel;
     lbledtFirstName: TLabeledEdit;
     lbledtLastName: TLabeledEdit;
-    lbledtCreditCardNumber: TLabeledEdit;
-    lbledtSalary: TLabeledEdit;
-    lbledtSocialSecurityNumber: TLabeledEdit;
     dtpBirthDate: TDateTimePicker;
     lblBirthDate: TLabel;
+    lbledtSocialSecurityNumber: TLabeledEdit;
+    lbledtCreditCardNumber: TLabeledEdit;
+    lbledtSalary: TLabeledEdit;
+    btnUpdate: TButton;
+    cpUpdatableLedgerTable: TCategoryPanel;
+    dsQueryUpdatableInvoices: TDataSource;
+    dbgUpdatableInvoices: TDBGrid;
+    pnlModifyUpdatableInvoice: TPanel;
+    lbledtCustomerName: TLabeledEdit;
+    lbledtInvoiceNumber: TLabeledEdit;
+    dtpInvoiceDate: TDateTimePicker;
+    lblInvoiceDate: TLabel;
+    lbledtTotalDue: TLabeledEdit;
+    btnUpdateUpdatableInvoices: TButton;
+    btnOpenQueryUpdatableInvoices: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnConnectClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnOpenQueryClick(Sender: TObject);
     procedure btnUpdateClick(Sender: TObject);
     procedure dsQueryEncryptedDataDataChange(Sender: TObject; Field: TField);
+    procedure btnOpenQueryUpdatableInvoicesClick(Sender: TObject);
+    procedure dsQueryUpdatableInvoicesDataChange(Sender: TObject; Field: TField);
+    procedure btnUpdateUpdatableInvoicesClick(Sender: TObject);
   private
-    FAlwaysEncryptedMainPresenter: TAlwaysEncryptedMainPresenter;
+    FSecureSQLDatabaseMainPresenter: TSecureSQLDatabaseMainPresenter;
     // View utility
     procedure SetConnection;
   public
-    // Input (function)
+    // Input (function) column encryption
     function GetDriverID: string;
     function GetServerName: string;
     function GetDatabaseName: string;
@@ -63,7 +80,14 @@ type
     function GetSocialSecurityNumber: string;
     function GetCreditCardNumber: string;
     function GetSalary: Currency;
-    // Output (procedure)
+    // Input (function) ledger
+    function GetSELECTUpdatableInvoicesSQLText: string;
+    function GetdsUpdatableInvoices: TDataSource;
+    function GetCustomerName: string;
+    function GetInvoiceNumber: string;
+    function GetInvoiceDate: TDateTime;
+    function GetTotalDue: Currency;
+    // Output (procedure) column encryption
     procedure Connect;
     procedure OpenQuery;
     procedure UpdatePerson;
@@ -73,11 +97,19 @@ type
     procedure DisplaySocialSecurityNumber(AValue: string);
     procedure DisplayCreditCardNumber(AValue: string);
     procedure DisplaySalary(AValue: Currency);
+    // Output (procedure) ledger
+    procedure UpdateUpdatableInvoice;
+    procedure DisplayCustomerName(AValue: string);
+    procedure DisplayInvoiceNumber(AValue: string);
+    procedure DisplayInvoiceDate(AValue: TDateTime);
+    procedure DisplayTotalDue(AValue: Currency);
+    procedure OpenQueryUpdatableInvoices;
+    // Output (procedure) general
     procedure DisplayMessage(AValue: string);
   end;
 
 var
-  frmAlwaysEncryptedMain: TfrmAlwaysEncryptedMain;
+  MainForm: TMainForm;
 
 implementation
 
@@ -88,172 +120,249 @@ const
 
 { TfrmAlwaysEncryptedMain }
 
-procedure TfrmAlwaysEncryptedMain.btnConnectClick(Sender: TObject);
+procedure TMainForm.btnConnectClick(Sender: TObject);
 begin
   Connect;
 end;
 
-procedure TfrmAlwaysEncryptedMain.btnOpenQueryClick(Sender: TObject);
+procedure TMainForm.btnOpenQueryClick(Sender: TObject);
 begin
   OpenQuery;
 end;
 
-procedure TfrmAlwaysEncryptedMain.btnUpdateClick(Sender: TObject);
+procedure TMainForm.btnOpenQueryUpdatableInvoicesClick(
+  Sender: TObject);
+begin
+  OpenQueryUpdatableInvoices;
+end;
+
+procedure TMainForm.btnUpdateClick(Sender: TObject);
 begin
   UpdatePerson;
 end;
 
-procedure TfrmAlwaysEncryptedMain.Connect;
+procedure TMainForm.btnUpdateUpdatableInvoicesClick(Sender: TObject);
 begin
-  FAlwaysEncryptedMainPresenter.Connect;
+  UpdateUpdatableInvoice;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayCreditCardNumber(
+procedure TMainForm.Connect;
+begin
+  FSecureSQLDatabaseMainPresenter.Connect;
+end;
+
+procedure TMainForm.DisplayCreditCardNumber(
   AValue: string);
 begin
   lbledtCreditCardNumber.Text := AValue;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayFirstName(AValue: string);
+procedure TMainForm.DisplayCustomerName(AValue: string);
+begin
+  lbledtCustomerName.Text := AValue;
+end;
+
+procedure TMainForm.DisplayFirstName(AValue: string);
 begin
   lbledtFirstName.Text := AValue;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayBirthDate(AValue: TDateTime);
+procedure TMainForm.DisplayInvoiceDate(AValue: TDateTime);
+begin
+  dtpInvoiceDate.DateTime := AValue;
+end;
+
+procedure TMainForm.DisplayInvoiceNumber(AValue: string);
+begin
+  lbledtInvoiceNumber.Text := AValue;
+end;
+
+procedure TMainForm.DisplayBirthDate(AValue: TDateTime);
 begin
   dtpBirthDate.DateTime := AValue;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayLastName(AValue: string);
+procedure TMainForm.DisplayLastName(AValue: string);
 begin
   lbledtLastName.Text := AValue;
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplayMessage(AValue: string);
+procedure TMainForm.DisplayMessage(AValue: string);
 begin
   Application.MessageBox(PChar(AValue), APPTITLE, MB_OK);
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplaySalary(AValue: Currency);
+procedure TMainForm.DisplaySalary(AValue: Currency);
 begin
   lbledtSalary.Text := AValue.ToString();
 end;
 
-procedure TfrmAlwaysEncryptedMain.DisplaySocialSecurityNumber(
+procedure TMainForm.DisplaySocialSecurityNumber(
   AValue: string);
 begin
   lbledtSocialSecurityNumber.Text := AValue
 end;
 
-procedure TfrmAlwaysEncryptedMain.dsQueryEncryptedDataDataChange(
+procedure TMainForm.DisplayTotalDue(AValue: Currency);
+begin
+  lbledtTotalDue.Text := AValue.ToString();
+end;
+
+procedure TMainForm.dsQueryEncryptedDataDataChange(
   Sender: TObject; Field: TField);
 begin
-  FAlwaysEncryptedMainPresenter.DisplayPerson;
+  FSecureSQLDatabaseMainPresenter.DisplayPerson;
 end;
 
-procedure TfrmAlwaysEncryptedMain.FormCreate(Sender: TObject);
+procedure TMainForm.dsQueryUpdatableInvoicesDataChange(Sender: TObject;
+  Field: TField);
 begin
-  FAlwaysEncryptedMainPresenter :=
-    TAlwaysEncryptedMainPresenter.Create(Self);
+  FSecureSQLDatabaseMainPresenter.DisplayInvoice;
 end;
 
-procedure TfrmAlwaysEncryptedMain.FormShow(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  FSecureSQLDatabaseMainPresenter :=
+    TSecureSQLDatabaseMainPresenter.Create(Self);
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
 begin
   SetConnection;
 end;
 
-function TfrmAlwaysEncryptedMain.GetColumnEncryption: Boolean;
+function TMainForm.GetColumnEncryption: Boolean;
 begin
-  result := chkColumnEncryption.Checked;
+  Result := chkColumnEncryption.Checked;
 end;
 
-function TfrmAlwaysEncryptedMain.GetCreditCardNumber: string;
+function TMainForm.GetCreditCardNumber: string;
 begin
-  result := lbledtCreditCardNumber.Text;
+  Result := lbledtCreditCardNumber.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetDatabaseName: string;
+function TMainForm.GetCustomerName: string;
 begin
-  result := lbledtDatabaseName.Text;
+  Result := lbledtCustomerName.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetDriverID: string;
+function TMainForm.GetDatabaseName: string;
 begin
-  result := lbledtDriverID.Text;
+  Result := lbledtDatabaseName.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetdsQueryEncryptedData: TDataSource;
+function TMainForm.GetDriverID: string;
 begin
-  result := dsQueryEncryptedData;
+  Result := lbledtDriverID.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetFirstName: string;
+function TMainForm.GetdsQueryEncryptedData: TDataSource;
 begin
-  result := lbledtFirstName.Text;
+  Result := dsQueryEncryptedData;
 end;
 
-function TfrmAlwaysEncryptedMain.GetBirthDate: TDateTime;
+function TMainForm.GetdsUpdatableInvoices: TDataSource;
 begin
-  result := dtpBirthDate.DateTime;
+  Result := dsQueryUpdatableInvoices;
 end;
 
-function TfrmAlwaysEncryptedMain.GetLastName: string;
+function TMainForm.GetFirstName: string;
 begin
-  result := lbledtLastName.Text;
+  Result := lbledtFirstName.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetPassword: string;
+function TMainForm.GetInvoiceDate: TDateTime;
 begin
-  result := lbledtPassword.Text;
+  Result := dtpInvoiceDate.DateTime;
 end;
 
-function TfrmAlwaysEncryptedMain.GetSalary: Currency;
+function TMainForm.GetInvoiceNumber: string;
 begin
-  result := StrToFloat(lbledtSalary.Text);
+  Result := lbledtInvoiceNumber.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetSELECTSQLText: string;
+function TMainForm.GetBirthDate: TDateTime;
 begin
-  result := memoSELECT.Text;
+  Result := dtpBirthDate.DateTime;
 end;
 
-function TfrmAlwaysEncryptedMain.GetServerName: string;
+function TMainForm.GetLastName: string;
 begin
-  result := lbledtServerName.Text;
+  Result := lbledtLastName.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetSocialSecurityNumber: string;
+function TMainForm.GetPassword: string;
 begin
-  result := lbledtSocialSecurityNumber.Text;
+  Result := lbledtPassword.Text;
 end;
 
-function TfrmAlwaysEncryptedMain.GetTrustServerCertificate: Boolean;
+function TMainForm.GetSalary: Currency;
 begin
-  result := chkTrustServerCertificate.Checked;
+  Result := StrToFloat(lbledtSalary.Text);
 end;
 
-function TfrmAlwaysEncryptedMain.GetUserName: string;
+function TMainForm.GetSELECTSQLText: string;
 begin
-  result := lbledtUserName.Text;
+  Result := memoSELECT.Text;
 end;
 
-procedure TfrmAlwaysEncryptedMain.OpenQuery;
+function TMainForm.GetSELECTUpdatableInvoicesSQLText: string;
 begin
-  FAlwaysEncryptedMainPresenter.OpenQuery;
+  Result := 'SELECT ID, CustomerName, InvoiceNumber, InvoiceDate, TotalDue FROM [Ledger].[Updatable_Invoices]';
 end;
 
-procedure TfrmAlwaysEncryptedMain.SetConnection;
+function TMainForm.GetServerName: string;
+begin
+  Result := lbledtServerName.Text;
+end;
+
+function TMainForm.GetSocialSecurityNumber: string;
+begin
+  Result := lbledtSocialSecurityNumber.Text;
+end;
+
+function TMainForm.GetTotalDue: Currency;
+begin
+  Result := StrToFloat(lbledtTotalDue.Text);
+end;
+
+function TMainForm.GetTrustServerCertificate: Boolean;
+begin
+  Result := chkTrustServerCertificate.Checked;
+end;
+
+function TMainForm.GetUserName: string;
+begin
+  Result := lbledtUserName.Text;
+end;
+
+procedure TMainForm.OpenQuery;
+begin
+  FSecureSQLDatabaseMainPresenter.OpenQuery;
+end;
+
+procedure TMainForm.OpenQueryUpdatableInvoices;
+begin
+  FSecureSQLDatabaseMainPresenter.OpenQueryUpdatableInvoices;
+end;
+
+procedure TMainForm.SetConnection;
 begin
   lbledtDriverID.Text := 'MSSQL';
   lbledtServerName.Text := 'decision-making';
-  lbledtDatabaseName.Text := 'AlwaysEncryptedDB';
+  lbledtDatabaseName.Text := 'SecureSQLDatabase';
   lbledtUserName.Text := 'Delphi_User';
-  lbledtPassword.Text := 'DelphiDay2024!';
+  lbledtPassword.Text := 'DelphiSecureSQLDatabase!';
 end;
 
-procedure TfrmAlwaysEncryptedMain.UpdatePerson;
+procedure TMainForm.UpdatePerson;
 begin
-  FAlwaysEncryptedMainPresenter.UpdatePerson;
+  FSecureSQLDatabaseMainPresenter.UpdatePerson;
+end;
+
+procedure TMainForm.UpdateUpdatableInvoice;
+begin
+  FSecureSQLDatabaseMainPresenter.UpdateInvoice;
 end;
 
 end.

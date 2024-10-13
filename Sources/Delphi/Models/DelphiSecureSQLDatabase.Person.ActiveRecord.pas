@@ -111,7 +111,7 @@ class function TPersonActiveRecord.FillPersonList(const ASQL: string): TPersons;
 var
   LQry: TFDQuery;
 begin
-  result := TPersons.Create(True);
+  Result := TPersons.Create(True);
   LQry := TFDQuery.Create(nil);
 
   try
@@ -121,7 +121,7 @@ begin
 
     while (not LQry.Eof) do
     begin
-      result.Add(LoadPerson(LQry));
+      Result.Add(LoadPerson(LQry));
       LQry.Next;
     end;
 
@@ -134,7 +134,7 @@ class function TPersonActiveRecord.Get(AID: Integer): TPersonActiveRecord;
 var
   LQry: TFDQuery;
 begin
-  result := nil;
+  Result := nil;
 
   LQry := TFDQuery.Create(nil);
   try
@@ -142,7 +142,7 @@ begin
     LQry.SQL.Text := Format(SQL_FIND_BY_PK, [AID]);
     LQry.Open();
     if (not LQry.Eof) then
-      result := LoadPerson(LQry);
+      Result := LoadPerson(LQry);
   finally
     LQry.Free;
   end;
@@ -150,7 +150,7 @@ end;
 
 class function TPersonActiveRecord.GetAll: TPersons;
 begin
-  result := FillPersonList(SQL_FIND_ALL);
+  Result := FillPersonList(SQL_FIND_ALL);
 end;
 
 procedure TPersonActiveRecord.Insert;
@@ -174,15 +174,15 @@ end;
 class function TPersonActiveRecord.LoadPerson(
   AReader: TFDAdaptedDataSet): TPersonActiveRecord;
 begin
-  result := TPersonActiveRecord.Create;
+  Result := TPersonActiveRecord.Create;
 
-  result.FID := AReader.Fields[0].AsInteger;
-  result.FFirstName := AReader.Fields[1].AsString;
-  result.FLastName := AReader.Fields[2].AsString;
-  result.BirthDate := AReader.Fields[3].AsDateTime;
-  result.FSocialSecurityNumber := AReader.Fields[4].AsString;
-  result.FCreditCardNumber := AReader.Fields[5].AsString;
-  result.FSalary := AReader.Fields[6].AsCurrency;
+  Result.FID := AReader.Fields[0].AsInteger;
+  Result.FFirstName := AReader.Fields[1].AsString;
+  Result.FLastName := AReader.Fields[2].AsString;
+  Result.BirthDate := AReader.Fields[3].AsDateTime;
+  Result.FSocialSecurityNumber := AReader.Fields[4].AsString;
+  Result.FCreditCardNumber := AReader.Fields[5].AsString;
+  Result.FSalary := AReader.Fields[6].AsCurrency;
 end;
 
 procedure TPersonActiveRecord.SetCreditCardNumber(const AValue: string);
@@ -224,8 +224,8 @@ begin
     LQry.Connection := DM.FDConnection;
     LQry.SQL.Text := SQL_UPDATE;
 
-    LQry.ParamByName('FirstName').DataType := ftstring;
-    LQry.ParamByName('LastName').DataType := ftstring;
+    LQry.ParamByName('FirstName').DataType := ftString;
+    LQry.ParamByName('LastName').DataType := ftString;
 
     LQry.ParamByName('BirthDate').DataType := ftDateTime;
     LQry.ParamByName('BirthDate').Size := 11;
@@ -252,7 +252,7 @@ begin
 
     LQry.ExecSQL;
   finally
-    LQry.Free
+    LQry.Free;
   end;
 end;
 

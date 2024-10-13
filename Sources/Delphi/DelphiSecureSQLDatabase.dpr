@@ -7,7 +7,8 @@ uses
   DelphiSecureSQLDatabase.Base.ActiveRecord in 'Models\DelphiSecureSQLDatabase.Base.ActiveRecord.pas',
   DelphiSecureSQLDatabase.Person.ActiveRecord in 'Models\DelphiSecureSQLDatabase.Person.ActiveRecord.pas',
   DelphiSecureSQLDatabase.MainPresenter in 'Presenters\DelphiSecureSQLDatabase.MainPresenter.pas',
-  DelphiSecureSQLDatabase.FMain in 'Views\DelphiSecureSQLDatabase.FMain.pas' {frmAlwaysEncryptedMain};
+  DelphiSecureSQLDatabase.FMain in 'Views\DelphiSecureSQLDatabase.FMain.pas' {MainForm},
+  DelphiSecureSQLDatabase.UpdatableInvoice.ActiveRecord in 'Models\DelphiSecureSQLDatabase.UpdatableInvoice.ActiveRecord.pas';
 
 {$R *.res}
 
@@ -15,6 +16,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TDM, DM);
-  Application.CreateForm(TfrmAlwaysEncryptedMain, frmAlwaysEncryptedMain);
+  Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

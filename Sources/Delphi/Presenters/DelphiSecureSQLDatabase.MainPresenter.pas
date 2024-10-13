@@ -7,26 +7,31 @@ uses
 
 type
 
-  TAlwaysEncryptedMainPresenter = class
+  TSecureSQLDatabaseMainPresenter = class
   protected
     FMainView: IMainView;
-  public
+  public // Column encryption
     constructor Create(AMainView: IMainView);
     procedure Connect;
     procedure OpenQuery;
     procedure UpdatePerson;
     procedure DisplayPerson;
+  public // Ledger
+    procedure OpenQueryUpdatableInvoices;
+    procedure UpdateInvoice;
+    procedure DisplayInvoice;
   end;
 
 implementation
 
 uses
   DelphiSecureSQLDatabase.DataModule, Data.DB,
-  DelphiSecureSQLDatabase.Person.ActiveRecord;
+  DelphiSecureSQLDatabase.Person.ActiveRecord,
+  DelphiSecureSQLDatabase.UpdatableInvoice.ActiveRecord;
 
 { TAlwaysEncryptedMainPresenter }
 
-procedure TAlwaysEncryptedMainPresenter.Connect;
+procedure TSecureSQLDatabaseMainPresenter.Connect;
 var
   LDriverID: string;
   LServerName: string;
@@ -81,13 +86,26 @@ begin
     FMainView.DisplayMessage('Not connected, see the previous error!');
 end;
 
-constructor TAlwaysEncryptedMainPresenter.Create(
+constructor TSecureSQLDatabaseMainPresenter.Create(
   AMainView: IMainView);
 begin
   FMainView := AMainView;
 end;
 
-procedure TAlwaysEncryptedMainPresenter.DisplayPerson;
+procedure TSecureSQLDatabaseMainPresenter.DisplayInvoice;
+var
+  LUpdatableInvoiceAR: TUpdatableInvoiceActiveRecord;
+begin
+  LUpdatableInvoiceAR := TUpdatableInvoiceActiveRecord.Get(
+    FMainView.GetdsUpdatableInvoices.DataSet.FieldByName('ID').AsInteger);
+
+  FMainView.DisplayCustomerName(LUpdatableInvoiceAR.CustomerName);
+  FMainView.DisplayInvoiceNumber(LUpdatableInvoiceAR.InvoiceNumber);
+  FMainView.DisplayInvoiceDate(LUpdatableInvoiceAR.InvoiceDate);
+  FMainView.DisplayTotalDue(LUpdatableInvoiceAR.TotalDue);
+end;
+
+procedure TSecureSQLDatabaseMainPresenter.DisplayPerson;
 var
   LPersonAR: TPersonActiveRecord;
 begin
@@ -102,7 +120,7 @@ begin
   FMainView.DisplaySalary(LPersonAR.Salary);
 end;
 
-procedure TAlwaysEncryptedMainPresenter.OpenQuery;
+procedure TSecureSQLDatabaseMainPresenter.OpenQuery;
 var
   LSQL: string;
   LDataSource: TDataSource;
@@ -121,7 +139,45 @@ begin
     FMainView.DisplayMessage('SQL query text is empty!');
 end;
 
-procedure TAlwaysEncryptedMainPresenter.UpdatePerson;
+procedure TSecureSQLDatabaseMainPresenter.OpenQueryUpdatableInvoices;
+var
+  LSQL: string;
+  LDataSource: TDataSource;
+begin
+  LSQL := FMainView.GetSELECTUpdatableInvoicesSQLText;
+
+  if (LSQL <> '') then
+  begin
+    LDataSource := FMainView.GetdsUpdatableInvoices;
+    LDataSource.DataSet := DM.FDQrySelectUpdatableInvoices;
+    DM.FDQrySelectUpdatableInvoices.Close;
+    DM.FDQrySelectUpdatableInvoices.SQL.Text := LSQL;
+    DM.FDQrySelectUpdatableInvoices.Open;
+  end
+  else
+    FMainView.DisplayMessage('SQL query text is empty!');
+end;
+
+procedure TSecureSQLDatabaseMainPresenter.UpdateInvoice;
+var
+  LUpdatableInvoiceAR: TUpdatableInvoiceActiveRecord;
+begin
+  TUpdatableInvoiceActiveRecord.Connection := DM.FDConnection;
+  LUpdatableInvoiceAR := TUpdatableInvoiceActiveRecord.Get(
+    FMainView.GetdsUpdatableInvoices.DataSet.FieldByName('ID').AsInteger);
+
+  try
+    LUpdatableInvoiceAR.CustomerName := FMainView.GetCustomerName;
+    LUpdatableInvoiceAR.InvoiceNumber := FMainView.GetInvoiceNumber;
+    LUpdatableInvoiceAR.InvoiceDate := FMainView.GetInvoiceDate;
+    LUpdatableInvoiceAR.TotalDue := FMainView.GetTotalDue;
+    LUpdatableInvoiceAR.Update;
+  finally
+    LUpdatableInvoiceAR.Free;
+  end;
+end;
+
+procedure TSecureSQLDatabaseMainPresenter.UpdatePerson;
 var
   LPersonAR: TPersonActiveRecord;
 begin
